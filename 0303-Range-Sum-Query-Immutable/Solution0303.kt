@@ -14,24 +14,26 @@ Note:
 You may assume that the array does not change.
 There are many calls to sumRange function.
  */
-class NumArray(nums: IntArray) {
-    // sums[i] 等于 nums[0...i)范围内元素的和
-    private val sums = IntArray(nums.size + 1)
+class Solution0303 {
+    class NumArray(nums: IntArray) {
+        // sums[i] 等于 nums[0...i)范围内元素的和
+        private val sums = IntArray(nums.size + 1)
 
-    init {
-        sums[0] = 0
-        for (i in 1 until sums.size) {
-            sums[i] = sums[i - 1] + nums[i - 1]
+        init {
+            sums[0] = 0
+            for (i in 1 until sums.size) {
+                sums[i] = sums[i - 1] + nums[i - 1]
+            }
         }
-    }
 
-    fun sumRange(i: Int, j: Int): Int {
-        return sums[j + 1] - sums[i]
+        fun sumRange(i: Int, j: Int): Int {
+            return sums[j + 1] - sums[i]
+        }
     }
 }
 
 fun main() {
-    val numArray = NumArray(intArrayOf(-2, 0, 3, -5, 2, -1))
+    val numArray = Solution0303.NumArray(intArrayOf(-2, 0, 3, -5, 2, -1))
     println(numArray.sumRange(0, 2))
     println(numArray.sumRange(2, 5))
     println(numArray.sumRange(0, 5))
