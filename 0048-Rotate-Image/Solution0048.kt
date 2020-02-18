@@ -1,5 +1,3 @@
-import com.sun.deploy.ui.MacJavaTrayIcon
-
 // https://leetcode.com/problems/rotate-image/
 // 48. Rotate Image
 /*
