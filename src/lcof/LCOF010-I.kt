@@ -25,7 +25,7 @@ F(N) = F(N - 1) + F(N - 2), 其中 N > 1.
 链接：https://leetcode-cn.com/problems/fei-bo-na-qi-shu-lie-lcof
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  */
-class Solution010 {
+class Solution010_I {
     fun fib(n: Int): Int {
         if (n == 0) return 0
         if (n == 1) return 1
