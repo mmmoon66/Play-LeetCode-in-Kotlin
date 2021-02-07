@@ -1,4 +1,3 @@
-import javafx.css.converter.PaintConverter
 
 // 1002. Find Common Characters
 /*
