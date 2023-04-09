@@ -13,19 +13,14 @@ return [0, 1].
 
 class Solution0001 {
     fun twoSum(nums: IntArray, target: Int): IntArray {
-        if (nums.size < 2) {
-            return intArrayOf(-1, -1)
-        }
-        val record = HashMap<Int, Int>()
-        for (index in nums.indices) {
-            val other = target - nums[index]
-            if (record.containsKey(other)) {
-                return intArrayOf(record[other]!!, index)
-            } else {
-                record[nums[index]] = index
+        val record = mutableMapOf<Int, Int>()
+        nums.forEachIndexed { index, value ->
+            record[target - value]?.let {
+                return intArrayOf(it, index)
             }
+            record[value] = index
         }
-        return intArrayOf(-1, -1)
+        return intArrayOf()
     }
 }
 
@@ -34,7 +29,7 @@ fun main() {
     val nums = intArrayOf(2, 7, 11, 15)
     val target = 9
     val result = s.twoSum(nums, target)
-    println(Arrays.toString(result))
+    println(result.contentToString())
 }
 /*
 Runtime: 136 ms, faster than 100.00% of Kotlin online submissions for Two Sum.
