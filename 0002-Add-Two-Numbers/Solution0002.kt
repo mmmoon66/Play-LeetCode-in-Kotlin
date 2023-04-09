@@ -12,32 +12,28 @@ Explanation: 342 + 465 = 807.
  */
 class Solution0002 {
     fun addTwoNumbers(l1: ListNode?, l2: ListNode?): ListNode? {
-        if (l1 == null) return l2
-        if (l2 == null) return l1
-        var p: ListNode? = l1
-        var q: ListNode? = l2
+        var p = l1
+        var q = l2
         val dummyHead = ListNode(-1)
         var curNode = dummyHead
         var carry = 0
-        while(p != null || q != null) {
+        while (p != null || q != null || carry > 0) {
             var sum = carry
-            if (p != null) {
-                sum += p.`val`
-                p = p.next
+            p?.let {
+                sum += it.`val`
+                p = it.next
             }
-            if (q != null) {
-                sum += q.`val`
-                q = q.next
+            q?.let {
+                sum += it.`val`
+                q = it.next
             }
-            carry = sum / 10
-            sum %= 10
-            curNode.next = ListNode(sum)
+            curNode.next = ListNode(sum % 10)
             curNode = curNode.next!!
+            carry = sum / 10
         }
-        if (carry > 0) {
-            curNode.next = ListNode(carry)
-        }
-        return dummyHead.next
+        val ret = dummyHead.next
+        dummyHead.next = null
+        return ret
     }
 }
 
