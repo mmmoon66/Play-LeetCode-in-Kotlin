@@ -18,29 +18,23 @@ Output:
  */
 class Solution0077 {
     fun combine(n: Int, k: Int): List<List<Int>> {
-        val res = mutableListOf<List<Int>>()
-        generateCombination(n, k, 1, mutableListOf(), res)
-        return res
+        val ret = mutableListOf<List<Int>>()
+        generateCombination(n, k, 1, mutableListOf(), ret)
+        return ret
     }
 
     private fun generateCombination(
-        n: Int,
-        k: Int,
-        startNum: Int,
-        solution: MutableList<Int>,
-        res: MutableList<List<Int>>
+        n: Int, k: Int, startNum: Int, path: MutableList<Int>, ret: MutableList<List<Int>>
     ) {
-        if (solution.size == k) {
-            res.add(solution.toList())
+        if (path.size == k) {
+            ret.add(path.toList())
             return
         }
-        if (startNum > n) {
-            return
-        }
+        if (path.size + (n - startNum + 1) < k) return//剪枝
         for (i in startNum..n) {
-            solution.add(i)
-            generateCombination(n, k, i + 1, solution, res)
-            solution.removeAt(solution.size - 1)
+            path.add(i)
+            generateCombination(n, k, i + 1, path, ret)
+            path.removeAt(path.lastIndex)
         }
     }
 }
