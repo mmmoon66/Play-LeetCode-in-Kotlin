@@ -1,5 +1,3 @@
-import kotlin.math.absoluteValue
-
 // https://leetcode-cn.com/problems/divide-two-integers/
 // 29. Divide Two Integers
 /*
@@ -41,29 +39,37 @@ divisor != 0
 class Solution0029 {
     fun divide(dividend: Int, divisor: Int): Int {
         assert(divisor != 0)
-        if (dividend == 0) return 0
-        val a: Long = dividend.toLong().absoluteValue
-        val b: Long = divisor.toLong().absoluteValue
+        val a = dividend.toLong().abs()
+        val b = divisor.toLong().abs()
         val sign = if ((dividend > 0 && divisor > 0) || (dividend < 0 && divisor < 0)) 1 else -1
-        var count: Long = 0
-        var quotient: Long = 0
-        var c: Long = b
-        while(c <= a) {
-            ++count
-            quotient = if (sign == 1) count else -count
-            if (quotient > Int.MAX_VALUE || quotient < Int.MIN_VALUE) return Int.MAX_VALUE
-            c += b
+        val c = div(a, b)
+        return if (sign > 0) {
+            minOf(Int.MAX_VALUE.toLong(), c).toInt()
+        } else {
+            maxOf(Int.MIN_VALUE.toLong(), -c).toInt()
         }
-        return quotient.toInt()
+    }
+
+    private fun Long.abs(): Long = if (this > 0) this else -this
+
+    private fun div(a: Long, b: Long): Long {
+        if (a < b) return 0
+        var count = 1L
+        var tb = b
+        while (tb + tb <= a) {
+            count += count
+            tb += tb
+        }
+        return count + div(a - tb, b)
     }
 }
 
 fun main() {
     val s = Solution0029()
-    println(s.divide(10, 3))
-    println(s.divide(7, -3))
-    println(s.divide(1, 1))
-    println(s.divide(0, 1))
-    println(s.divide(Int.MIN_VALUE, -1))
+    println(s.divide(10, 3) == 3)
+    println(s.divide(7, -3) == -2)
+    println(s.divide(1, 1) == 1)
+    println(s.divide(0, 1) == 0)
+    println(s.divide(Int.MIN_VALUE, -1) == Int.MAX_VALUE)
 }
 // 超出时间限制
