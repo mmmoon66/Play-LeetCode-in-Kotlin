@@ -17,29 +17,28 @@ Output:
 ]
  */
 class Solution0046 {
-    private lateinit var used: BooleanArray
+    fun permute(nums: IntArray): List<List<Int>> {
+        val ret = mutableListOf<List<Int>>()
+        genPermutation(nums, mutableListOf(), ret, BooleanArray(nums.size))
+        return ret
+    }
 
-    private fun generatePermutation(nums: IntArray, path: MutableList<Int>, res: MutableList<List<Int>>) {
-        if (path.size == nums.size) {
-            res.add(path.toList())
+    private fun genPermutation(
+        nums: IntArray, solution: MutableList<Int>, ret: MutableList<List<Int>>, used: BooleanArray
+    ) {
+        if (solution.size == nums.size) {
+            ret.add(solution.toList())
             return
         }
-        nums.forEachIndexed { index, num ->
-            if (!used[index]) {
+        nums.forEachIndexed { index, i ->
+            if (used[index].not()) {
                 used[index] = true
-                path.add(num)
-                generatePermutation(nums, path, res)
-                path.removeAt(path.size - 1)
+                solution.add(i)
+                genPermutation(nums, solution, ret, used)
+                solution.removeLast()
                 used[index] = false
             }
         }
-    }
-
-    fun permute(nums: IntArray): List<List<Int>> {
-        used = BooleanArray(nums.size)
-        val res = mutableListOf<List<Int>>()
-        generatePermutation(nums, mutableListOf(), res)
-        return res
     }
 }
 
