@@ -18,23 +18,23 @@ Output: 1->1->2->3->4->4->5->6
 class Solution0023_v2 {
     fun mergeKLists(lists: Array<ListNode?>): ListNode? {
         val dummyHead = ListNode(-1)
-        var curNode = dummyHead
+        var prev = dummyHead
         val pq = PriorityQueue<ListNode> { a, b -> a.`val` - b.`val` }
-        for (head in lists) {
-            if (head != null) pq.offer(head)
-        }
-        while(pq.isNotEmpty()) {
+        lists.filterNotNull().forEach { pq.offer(it) }
+        while (pq.isNotEmpty()) {
             var top = pq.poll()
             if (pq.isEmpty()) {
-                curNode.next = top
+                prev.next = top
                 break
             }
-            curNode.next = top
+            val node = top
             top = top.next
-            curNode = curNode.next!!
-            if (top != null) {
-                pq.offer(top)
+            node.next = null
+            top?.let {
+                pq.offer(it)
             }
+            prev.next = node
+            prev = prev.next!!
         }
         return dummyHead.next
     }

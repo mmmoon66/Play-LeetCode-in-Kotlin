@@ -16,27 +16,26 @@ Output: 1->1->2->3->4->4->5->6
 class Solution0023 {
     fun mergeKLists(lists: Array<ListNode?>): ListNode? {
         val dummyHead = ListNode(-1)
-        var prev = dummyHead
-        var finished = 0
-        for (head in lists) {
-            if (head == null) ++finished
-        }
-        while(finished < lists.size) {
+        var prev: ListNode? = dummyHead
+        while (true) {
             var minHead: ListNode? = null
-            var minIndex = -1
-            for (i in 0 until lists.size) {
-                val head = lists[i]
-                if (head != null && (minHead == null || head.`val` < minHead.`val`)) {
-                    minHead = head
-                    minIndex = i
+            var index = -1
+            for (i in lists.indices) {
+                lists[i]?.let {
+                    if (minHead == null || it.`val` < minHead!!.`val`) {
+                        minHead = it
+                        index = i
+                    }
                 }
             }
-            if (minHead == null || minIndex == -1) break
-            lists[minIndex] = lists[minIndex]?.next
-            if (lists[minIndex] == null) ++finished
-            prev.next = minHead
-            minHead.next = null
-            prev = prev.next!!
+            if (minHead == null) break;
+            val node = minHead
+            minHead = minHead?.next
+            node?.next = null
+            lists[index] = minHead
+
+            prev?.next = node
+            prev = prev?.next
         }
         return dummyHead.next
     }
