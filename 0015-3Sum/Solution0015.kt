@@ -19,47 +19,39 @@ A solution set is:
  */
 class Solution0015 {
     fun threeSum(nums: IntArray): List<List<Int>> {
-        val res = mutableListOf<List<Int>>()
-        if (nums.size < 3) {
-            return res
-        }
         nums.sort()
+        val ret = mutableListOf<List<Int>>()
         var i = 0
-        while(i < nums.size) {
-            val target = -nums[i]
-            var l = i + 1
-            var r = nums.size - 1
-            while(l < r) {
-                val sum = nums[l] + nums[r]
-                if (sum == target) {
-                    res.add(listOf(nums[i], nums[l], nums[r]))
-                    l = nextIndex(nums, l)
-                    r = prevIndex(nums, r)
-                } else if (sum < target) {
-                    l = nextIndex(nums, l)
+        while (i < nums.size) {
+            var j = i + 1
+            var k = nums.size - 1
+            while (j < k) {
+                val sum = nums[i] + nums[j] + nums[k]
+                if (sum == 0) {
+                    ret.add(listOf(nums[i], nums[j], nums[k]))
+                    j = nextIndex(nums, j)
+                    k = prevIndex(nums, k)
+                } else if (sum < 0) {
+                    j = nextIndex(nums, j)
                 } else {
-                    r = prevIndex(nums, r)
+                    k = prevIndex(nums, k)
                 }
             }
             i = nextIndex(nums, i)
         }
-        return res
+        return ret
     }
 
     private fun nextIndex(nums: IntArray, index: Int): Int {
         for (i in index + 1 until nums.size) {
-            if (nums[i] != nums[index]) {
-                return i
-            }
+            if (nums[i] != nums[index]) return i
         }
         return nums.size
     }
 
     private fun prevIndex(nums: IntArray, index: Int): Int {
         for (i in index - 1 downTo 0) {
-            if (nums[i] != nums[index]) {
-                return i
-            }
+            if (nums[i] != nums[index]) return i
         }
         return -1
     }
