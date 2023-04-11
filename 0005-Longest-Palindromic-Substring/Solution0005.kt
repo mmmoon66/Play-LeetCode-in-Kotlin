@@ -14,31 +14,30 @@ Output: "bb"
  */
 class Solution0005 {
     fun longestPalindrome(s: String): String {
-        var res = ""
-        for (i in 0 until s.length) {
+        var ret = ""
+        for (i in s.indices) {
             var p = findPalindrome(s, i, i)
-            if (p.length > res.length) {
-                res = p
+            if (p.length > ret.length) {
+                ret = p
             }
-            p = findPalindrome(s, i, i + 1)
-            if (p.length > res.length) {
-                res = p
+            if (i + 1 < s.length) {
+                p = findPalindrome(s, i, i + 1)
+                if (p.length > ret.length) {
+                    ret = p
+                }
             }
         }
-        return res
+        return ret
     }
 
-    private fun findPalindrome(s: String, l: Int, r: Int): String {
-        if (r >= s.length) {
-            return ""
+    private fun findPalindrome(s: String, left: Int, right: Int): String {
+        var l = left
+        var r = right
+        while (l >= 0 && r < s.length && s[l] == s[r]) {
+            --l
+            ++r
         }
-        var i = l
-        var j = r
-        while(i >= 0 && j < s.length && s[i] == s[j]) {
-            --i
-            ++j
-        }
-        return s.substring(i + 1, j)
+        return s.substring(l + 1, r)
     }
 }
 
