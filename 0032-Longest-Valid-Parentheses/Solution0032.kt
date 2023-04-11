@@ -1,5 +1,3 @@
-import java.util.*
-
 // https://leetcode.com/problems/longest-valid-parentheses/
 // 32. Longest Valid Parentheses
 /*
@@ -17,35 +15,26 @@ Explanation: The longest valid parentheses substring is "()()"
  */
 class Solution0032 {
     fun longestValidParentheses(s: String): Int {
-        // 可能的最大长度
-        val maxLen = s.length - s.length % 2
-        var len = maxLen
-        while(len >= 0) {
-            var i = 0
-            while(i < s.length) {
-                val end = i + len - 1
-                if (end < s.length && isValidParentheses(s, i, end)) return len
-                ++i
+        val len = if (s.length % 2 == 0) s.length else s.length - 1
+        for (l in len downTo 2 step 2) {
+            for (i in s.indices) {
+                val r = i + l - 1
+                if (r >= s.length) break
+                if (isValidParentheses(s, i, r)) return l
             }
-            len -= 2
         }
         return 0
     }
 
-    // s[start..end]
-    private fun isValidParentheses(s: String, start: Int, end: Int): Boolean {
-        val len = end - start + 1
+    private fun isValidParentheses(s: String, l: Int, r: Int): Boolean {
+        val len = r - l + 1
         if (len % 2 == 1) return false
-        val stack = Stack<Char>()
-        var i = start
-        while(i <= end) {
-            val c = s[i]
-            ++i
-            if (c == '(') {
-                stack.push(c)
-            } else if (c == ')') {
-                if (stack.isEmpty()) return false
-                val top = stack.pop()
+        val stack = mutableListOf<Char>()
+        for (i in l..r) {
+            if (s[i] == '(') {
+                stack.add(s[i])
+            } else {
+                val top = stack.removeLastOrNull()
                 if (top != '(') return false
             }
         }
