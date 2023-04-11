@@ -10,32 +10,28 @@ Output: 1->1->2->3->4->4
 class Solution0021 {
     fun mergeTwoLists(l1: ListNode?, l2: ListNode?): ListNode? {
         val dummyHead = ListNode(-1)
-        var head1 = l1
-        var head2 = l2
-        var prev = dummyHead
-        while(head1 != null && head2 != null) {
-            if (head1.`val` < head2.`val`) {
-                val node = head1
-                head1 = node.next
+        var h1 = l1
+        var h2 = l2
+        var curNode: ListNode? = dummyHead
+        while (h1 != null && h2 != null) {
+            if (h1.`val` < h2.`val`) {
+                val node = h1
+                h1 = h1.next
                 node.next = null
 
-                prev.next = node
-                prev = prev.next!!
+                curNode?.next = node
+                curNode = curNode?.next
             } else {
-                val node = head2
-                head2 = node.next
+                val node = h2
+                h2 = h2.next
                 node.next = null
 
-                prev.next = node
-                prev = prev.next!!
+                curNode?.next = node
+                curNode = curNode?.next
             }
         }
-        if (head1 != null) {
-            prev.next = head1
-        }
-        if (head2 != null) {
-            prev.next = head2
-        }
+        if (h1 != null) curNode?.next = h1
+        if (h2 != null) curNode?.next = h2
         return dummyHead.next
     }
 }
