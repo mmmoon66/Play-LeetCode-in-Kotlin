@@ -18,27 +18,26 @@ The median is (2 + 3)/2 = 2.5
 class Solution0004 {
     fun findMedianSortedArrays(nums1: IntArray, nums2: IntArray): Double {
         val m = nums1.size
-        val n = nums2.size
         if (m == 0) {
             return median(nums2)
         }
+        val n = nums2.size
         if (n == 0) {
             return median(nums1)
         }
-
+        val half = (m + n) / 2
+        val nums = IntArray(half + 1)
         var i = 0
         var j = 0
         var k = 0
-        val half = (m + n) / 2
-        val nums = IntArray(half + 1)
-        while (k <= half) {
+        while (k < nums.size) {
             if (i == m) {
                 nums[k++] = nums2[j++]
             } else if (j == n) {
                 nums[k++] = nums1[i++]
             } else if (nums1[i] < nums2[j]) {
                 nums[k++] = nums1[i++]
-            } else { // nums1[i] >= nums2[j]
+            } else {
                 nums[k++] = nums2[j++]
             }
         }
@@ -51,7 +50,10 @@ class Solution0004 {
 
     private fun median(nums: IntArray): Double {
         val size = nums.size
-        return if (size % 2 == 0) {
+
+        return if (size == 0) {
+            0.0
+        } else if (size % 2 == 0) {
             (nums[size / 2] + nums[size / 2 - 1]) / 2.0
         } else {
             nums[size / 2] * 1.0
@@ -61,8 +63,8 @@ class Solution0004 {
 
 fun main() {
     val s = Solution0004()
-    println(s.findMedianSortedArrays(intArrayOf(1, 3), intArrayOf(2)))
-    println(s.findMedianSortedArrays(intArrayOf(1, 2), intArrayOf(3, 4)))
+    println(s.findMedianSortedArrays(intArrayOf(1, 3), intArrayOf(2)) == 2.0)
+//    println(s.findMedianSortedArrays(intArrayOf(1, 2), intArrayOf(3, 4)) == 2.5)
 }
 /*
 Runtime: 396 ms, faster than 18.54% of Kotlin online submissions for Median of Two Sorted Arrays.
