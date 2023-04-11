@@ -21,43 +21,31 @@ Output: -1
  */
 class Solution0033 {
     fun search(nums: IntArray, target: Int): Int {
-        var l = 0
-        var r = nums.size - 1
-        while(l <= r) {
-            val mid = l + (r - l) / 2
-            if (nums[mid] == target) {
+        var lo = 0
+        var hi = nums.size - 1
+        while (lo <= hi) {
+            val mid = lo + (hi - lo) / 2
+            if (target == nums[mid]) {
                 return mid
-            } else if (nums[mid] < target) {
-                if (nums[l] > nums[r]) {
-                    if (nums[mid] >= nums[l]) {
-                        l = mid + 1
-                    } else if (nums[mid] <= nums[r]) {
-                        if (target >= nums[l]) {
-                            r = mid - 1
-                        } else if (target <= nums[r]) {
-                            l = mid + 1
-                        } else {
-                            return -1
-                        }
+            } else if (target < nums[mid]) {
+                if (nums[lo] <= nums[mid]) {
+                    if (target < nums[lo]) {
+                        lo = mid + 1
+                    } else {
+                        hi = mid - 1
                     }
                 } else {
-                    l = mid + 1
+                    hi = mid - 1
                 }
             } else {
-                if (nums[l] > nums[r]) {
-                    if (nums[mid] >= nums[l]) {
-                        if (target >= nums[l]) {
-                            r = mid - 1
-                        } else if (target <= nums[r]) {
-                            l = mid + 1
-                        } else {
-                            return -1
-                        }
-                    } else if (nums[mid] <= nums[r]) {
-                        r = mid - 1
+                if (nums[hi] >= nums[mid]) {
+                    if (target > nums[hi]) {
+                        hi = mid - 1
+                    } else {
+                        lo = mid + 1
                     }
                 } else {
-                    r = mid - 1
+                    lo = mid + 1
                 }
             }
         }
@@ -67,9 +55,9 @@ class Solution0033 {
 
 fun main() {
     val s = Solution0033()
-    println(s.search(intArrayOf(4, 5, 6, 7, 0, 1, 2), 0))
-    println(s.search(intArrayOf(4, 5, 6, 7, 0, 1, 2), 3))
-    println(s.search(intArrayOf(3, 1), 1))
+    assert(s.search(intArrayOf(4, 5, 6, 7, 0, 1, 2), 0) == 4)
+    assert(s.search(intArrayOf(4, 5, 6, 7, 0, 1, 2), 3) == -1)
+    assert(s.search(intArrayOf(3, 1), 1) == 1)
 }
 /*
 Runtime: 152 ms, faster than 63.89% of Kotlin online submissions for Search in Rotated Sorted Array.
