@@ -20,35 +20,22 @@ The order of your output does not matter.
  */
 class Solution0049 {
     fun groupAnagrams(strs: Array<String>): List<List<String>> {
-        val set = mutableSetOf<String>()
+        val map = mutableMapOf<String, MutableList<String>>()
         for (str in strs) {
-            set.add(str.toCharArray().sorted().joinToString(""))
-        }
-        val res = mutableListOf<List<String>>()
-        for (s in set) {
-            val item = mutableListOf<String>()
-            for (str in strs) {
-                if (isAnagram(s, str)) item.add(str)
+            val sorted = String(str.toCharArray().sorted().toCharArray())
+            if (map[sorted] == null) {
+                map[sorted] = mutableListOf()
             }
-            res.add(item)
+            map[sorted]!!.add(str)
         }
-        return res
+        return map.values.toList()
     }
+}
 
-    private fun isAnagram(s: String, t: String): Boolean {
-        if (s.length != t.length) return false
-        val freq = mutableMapOf<Char, Int>()
-        for (c in s) {
-            freq[c] = freq.getOrDefault(c, 0) + 1
-        }
-        for (c in t) {
-            if (freq[c] == null || freq[c] == 0) {
-                return false
-            }
-            freq[c] = freq[c]!! - 1
-        }
-        return true
-    }
+fun main() {
+    val strs = arrayOf("eat", "tea", "tan", "ate", "nat", "bat")
+    val s = Solution0049()
+    println(s.groupAnagrams(strs))
 }
 /*
 Runtime: 2844 ms, faster than 5.56% of Kotlin online submissions for Group Anagrams.
