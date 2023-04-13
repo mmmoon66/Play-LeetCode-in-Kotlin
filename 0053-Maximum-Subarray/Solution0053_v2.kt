@@ -11,23 +11,23 @@ Explanation: [4,-1,2,1] has the largest sum = 6.
 Follow up:
 If you have figured out the O(n) solution, try coding another solution using the divide and conquer approach, which is more subtle.
  */
-class Solution0053 {
+class Solution0053_v2 {
     fun maxSubArray(nums: IntArray): Int {
-        if (nums.isEmpty()) return 0
-        var curMin = 0
-        var curMax = Int.MIN_VALUE
-        var curSum = 0
-        nums.forEach {
-            curSum += it
-            curMax = maxOf(curMax, curSum - curMin)
-            curMin = minOf(curMin, curSum)
+        if (nums.isEmpty()) {
+            return 0
         }
-        return curMax
+        var maxCur = nums[0]
+        var maxSoFar = nums[0]
+        for (i in 1 until nums.size) {
+            maxCur = maxOf(nums[i], maxCur + nums[i])
+            maxSoFar = maxOf(maxSoFar, maxCur)
+        }
+        return maxSoFar
     }
 }
 
 fun main() {
-    val s = Solution0053()
+    val s = Solution0053_v2()
     println(s.maxSubArray(intArrayOf(-2, 1, -3, 4, -1, 2, 1, -5, 4)))
     println(s.maxSubArray(intArrayOf(-1)))
 }
