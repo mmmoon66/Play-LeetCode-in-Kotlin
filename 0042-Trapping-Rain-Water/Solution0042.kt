@@ -12,41 +12,23 @@ Output: 6
 class Solution0042 {
     fun trap(height: IntArray): Int {
         val n = height.size
-        if (n <= 2) return 0
-        // leftMax[i] 表示 height[0..i] 区间内的最大值
+        // leftMax[i]代表height[0..i]区间内元素的最大值
         val leftMax = IntArray(n)
-        // rightMax[i] 表示 height[i..n-1] 区间内的最大值
+        for (i in 0 until n) {
+            leftMax[i] = maxOf(height[i], leftMax.getOrNull(i - 1) ?: 0)
+        }
+        // rightMax[i]表示height[i..n-1]区间内元素的最大值
         val rightMax = IntArray(n)
-
-        var i = 0
-        var max = 0
-        while (i < n) {
-            max = maxOf(max, height[i])
-            leftMax[i] = max
-            ++i
+        for (i in n - 1 downTo 0) {
+            rightMax[i] = maxOf(height[i], rightMax.getOrNull(i + 1) ?: 0)
         }
-
-        i = n - 1
-        max = 0
-        while (i >= 0) {
-            max = maxOf(max, height[i])
-            rightMax[i] = max
-            --i
-        }
-
-        var sum = 0
-        height.forEachIndexed { index, h ->
-            if (leftMax[index] > h && rightMax[index] > h) {
-                sum += minOf(leftMax[index], rightMax[index]) - h
-            }
-        }
-        return sum
+        return height.mapIndexed { index, h -> minOf(leftMax[index], rightMax[index]) - h }.sum()
     }
 }
 
 fun main() {
     val s = Solution0042()
-    println(s.trap(intArrayOf(0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1)))
+    println(s.trap(intArrayOf(0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1)) == 6)
 }
 /*
 Runtime: 176 ms, faster than 92.86% of Kotlin online submissions for Trapping Rain Water.
