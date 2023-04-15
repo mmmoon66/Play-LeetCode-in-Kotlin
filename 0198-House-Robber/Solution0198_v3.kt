@@ -16,30 +16,28 @@ Output: 12
 Explanation: Rob house 1 (money = 2), rob house 3 (money = 9) and rob house 5 (money = 1).
              Total amount you can rob = 2 + 9 + 1 = 12.
  */
-class Solution0198 {
-    private var memo = intArrayOf()
-
+class Solution0198_v3 {
     fun rob(nums: IntArray): Int {
-        memo = IntArray(nums.size) { -1 }
-        return tryRob(nums, nums.lastIndex)
-    }
+        if (nums.isEmpty()) return 0
+        if (nums.size == 1) return nums[0]
+        var prevMax = nums[0]
+        var curMax = maxOf(nums[0], nums[1])
 
-    // 尝试在nums[0..index]范围内偷取宝物所能偷取的最大值
-    private fun tryRob(nums: IntArray, index: Int): Int {
-        if (index < 0) return 0
-        if (index == 0) return nums[0]
-        if (memo[index] != -1) return memo[index]
-        return maxOf(
-            nums[index] + tryRob(nums, index - 2),//偷取index位置处的宝物
-            tryRob(nums, index - 1)//不偷取index位置处的宝物
-        ).also { memo[index] = it }
+        for (i in 2 until nums.size) {
+            curMax = maxOf(curMax, nums[i] + prevMax).also { prevMax = curMax }
+        }
+        return curMax
     }
 }
 
 fun main() {
-    val s = Solution0198()
-    println(s.rob(intArrayOf()))
-    println(s.rob(intArrayOf(1)))
-    println(s.rob(intArrayOf(1, 2, 3, 1)))
-    println(s.rob(intArrayOf(2, 7, 9, 3, 1)))
+    val s = Solution0198_v3()
+    println(s.rob(intArrayOf()) == 0)
+    println(s.rob(intArrayOf(1)) == 1)
+    println(s.rob(intArrayOf(1, 2, 3, 1)) == 4)
+    println(s.rob(intArrayOf(2, 7, 9, 3, 1)) == 12)
 }
+/*
+Runtime: 88 ms, faster than 100.00% of Kotlin online submissions for House Robber.
+Memory Usage: 36.1 MB, less than 100.00% of Kotlin online submissions for House Robber.
+ */

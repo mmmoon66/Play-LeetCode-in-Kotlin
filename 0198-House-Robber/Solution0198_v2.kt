@@ -16,30 +16,25 @@ Output: 12
 Explanation: Rob house 1 (money = 2), rob house 3 (money = 9) and rob house 5 (money = 1).
              Total amount you can rob = 2 + 9 + 1 = 12.
  */
-class Solution0198 {
-    private var memo = intArrayOf()
-
+class Solution0198_v2 {
     fun rob(nums: IntArray): Int {
-        memo = IntArray(nums.size) { -1 }
-        return tryRob(nums, nums.lastIndex)
-    }
-
-    // 尝试在nums[0..index]范围内偷取宝物所能偷取的最大值
-    private fun tryRob(nums: IntArray, index: Int): Int {
-        if (index < 0) return 0
-        if (index == 0) return nums[0]
-        if (memo[index] != -1) return memo[index]
-        return maxOf(
-            nums[index] + tryRob(nums, index - 2),//偷取index位置处的宝物
-            tryRob(nums, index - 1)//不偷取index位置处的宝物
-        ).also { memo[index] = it }
+        val n = nums.size
+        if (n == 0) return 0
+        if (n == 1) return nums[0]
+        val dp = IntArray(n)//dp[i]表示偷取nums[0..i]范围内的宝物
+        dp[0] = nums[0]
+        dp[1] = maxOf(nums[0], nums[1])
+        for (i in 2 until n) {
+            dp[i] = maxOf(dp[i - 1], nums[i] + dp[i - 2])
+        }
+        return dp.last()
     }
 }
 
 fun main() {
-    val s = Solution0198()
-    println(s.rob(intArrayOf()))
-    println(s.rob(intArrayOf(1)))
-    println(s.rob(intArrayOf(1, 2, 3, 1)))
-    println(s.rob(intArrayOf(2, 7, 9, 3, 1)))
+    val s = Solution0198_v2()
+    println(s.rob(intArrayOf()) == 0)
+    println(s.rob(intArrayOf(1)) == 1)
+    println(s.rob(intArrayOf(1, 2, 3, 1)) == 4)
+    println(s.rob(intArrayOf(2, 7, 9, 3, 1)) == 12)
 }
