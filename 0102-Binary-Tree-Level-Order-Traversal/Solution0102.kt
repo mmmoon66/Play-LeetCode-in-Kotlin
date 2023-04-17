@@ -22,17 +22,16 @@ return its level order traversal as:
 class Solution0102 {
     fun levelOrder(root: TreeNode?): List<List<Int>> {
         val res = mutableListOf<List<Int>>()
-        if (root == null) return res
-        val queue = LinkedList<TreeNode>()
-        queue.offer(root)
+        root ?: return res
+        val queue = LinkedList<TreeNode>().apply { offer(root) }
         while (queue.isNotEmpty()) {
-            val count = queue.size
+            val size = queue.size
             val level = mutableListOf<Int>()
-            for (i in 1..count) {
-                val front = queue.poll()
-                level.add(front.`val`)
-                if (front.left != null) queue.offer(front.left)
-                if (front.right != null) queue.offer(front.right)
+            repeat(size) {
+                val node = queue.poll()
+                level.add(node.`val`)
+                node.left?.let { queue.offer(it) }
+                node.right?.let { queue.offer(it) }
             }
             res.add(level)
         }
