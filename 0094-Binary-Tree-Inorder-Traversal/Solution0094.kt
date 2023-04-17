@@ -1,3 +1,5 @@
+import java.util.*
+
 // https://leetcode.com/problems/binary-tree-inorder-traversal/
 // 94. Binary Tree Inorder Traversal
 /*
@@ -33,3 +35,27 @@ class Solution0094 {
 Runtime: 124 ms, faster than 87.38% of Kotlin online submissions for Binary Tree Inorder Traversal.
 Memory Usage: 36.8 MB, less than 100.00% of Kotlin online submissions for Binary Tree Inorder Traversal.
  */
+
+class Solution0094V2 {
+    fun inorderTraversal(root: TreeNode?): List<Int> {
+        val res = mutableListOf<Int>()
+        root ?: return res
+        val stack = Stack<TreeNode>().apply { push(root) }
+        while (stack.isNotEmpty()) {
+            val node = stack.pop()
+            val left = node.left
+            val right = node.right
+            node.left = null
+            node.right = null
+            if (left == null && right == null) {
+                res.add(node.`val`)
+            } else {
+                // left->node->right => right->node->left
+                right?.let { stack.push(it) }
+                stack.push(node)
+                left?.let { stack.push(it) }
+            }
+        }
+        return res
+    }
+}
