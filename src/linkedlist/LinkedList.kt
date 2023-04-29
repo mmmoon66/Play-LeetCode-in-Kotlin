@@ -1,4 +1,4 @@
-package listnode
+package linkedlist
 
 import ListNode
 import java.util.*

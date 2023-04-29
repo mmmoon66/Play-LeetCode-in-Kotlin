@@ -1,6 +1,7 @@
 package dp
 
 import TreeNode
+import backtrack.Solution77
 
 // https://leetcode.cn/problems/climbing-stairs/
 class Solution70 {
@@ -666,6 +667,92 @@ class Solution1143V2 {
     }
 }
 
+class Solution39 {
+    fun combinationSum(nums: IntArray, target: Int): List<List<Int>> {
+        val res = mutableListOf<List<Int>>()
+        findCombination(nums, target, 0, mutableListOf(), res)
+        return res
+    }
+
+    private fun findCombination(
+        nums: IntArray,
+        target: Int,
+        index: Int,
+        path: MutableList<Int>,
+        res: MutableList<List<Int>>
+    ) {
+        if (target == 0) {
+            res.add(path.toList())
+            return
+        }
+        if (target < 0 || index >= nums.size) return
+        for (i in index until nums.size) {
+            path.add(nums[i])
+            findCombination(nums, target - nums[i], i, path, res)
+            path.removeAt(path.lastIndex)
+        }
+    }
+}
+
+class Solution40 {
+    fun combinationSum2(candidates: IntArray, target: Int): List<List<Int>> {
+        val res = mutableListOf<List<Int>>()
+        findCombination(candidates.sorted(), target, 0, BooleanArray(candidates.size), mutableListOf(), res)
+        return res
+    }
+
+    private fun findCombination(
+        nums: List<Int>,
+        target: Int,
+        index: Int,
+        used: BooleanArray,
+        path: MutableList<Int>,
+        res: MutableList<List<Int>>
+    ) {
+        if (target == 0) {
+            res.add(path.toList())
+            return
+        }
+        if (target < 0 || index >= nums.size) return
+        for (i in index until nums.size) {
+            if (nums[i] == nums.getOrNull(i - 1) && used[i - 1].not()) continue
+            used[i] = true
+            path.add(nums[i])
+            findCombination(nums, target - nums[i], i + 1, used, path, res)
+            path.removeAt(path.lastIndex)
+            used[i] = false
+        }
+    }
+}
+
+class Solution216 {
+    fun combinationSum3(k: Int, n: Int): List<List<Int>> {
+        val res = mutableListOf<List<Int>>()
+        findCombination(k, n, 1, 0, mutableListOf(), res)
+        return res
+    }
+
+    private fun findCombination(
+        k: Int,
+        n: Int,
+        curNum: Int,
+        sum: Int,
+        path: MutableList<Int>,
+        res: MutableList<List<Int>>
+    ) {
+        if (sum == n && path.size == k) {
+            res.add(path.toList())
+            return
+        }
+        if (sum >= n || path.size >= k) return
+        for (i in curNum..9) {
+            path.add(i)
+            findCombination(k, n, i + 1, sum + i, path, res)
+            path.removeAt(path.lastIndex)
+        }
+    }
+}
+
 fun main() {
 //    val weight = intArrayOf(1, 2, 3)
 //    val value = intArrayOf(6, 10, 12)
@@ -680,7 +767,16 @@ fun main() {
 //    println(s.wordBreak("leetcode", listOf("leet", "code")) == true)
 //    println(s.wordBreak("applepenapple", listOf("apple", "pen")) == true)
 
-    val s = Solution494V3()
-    println(s.findTargetSumWays(intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 1), 1) == 256)
-    println(s.findTargetSumWays(intArrayOf(1, 1, 1, 1, 1), 3) == 5)
+//    val s = Solution494V3()
+//    println(s.findTargetSumWays(intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 1), 1) == 256)
+//    println(s.findTargetSumWays(intArrayOf(1, 1, 1, 1, 1), 3) == 5)
+
+//    val s = Solution39()
+//    println(s.combinationSum(intArrayOf(2, 3, 6, 7), 7))
+//    println(s.combinationSum(intArrayOf(2, 3, 5), 8))
+//    println(s.combinationSum(intArrayOf(2), 1))
+
+    val s = Solution40()
+    println(s.combinationSum2(intArrayOf(10, 1, 2, 7, 6, 1, 5), 8))
+    println(s.combinationSum2(intArrayOf(2, 5, 2, 1, 2), 5))
 }
