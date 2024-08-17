@@ -1,6 +1,7 @@
 package hot150
 
 import java.util.LinkedList
+import java.util.PriorityQueue
 import java.util.Stack
 import kotlin.random.Random
 
@@ -1152,6 +1153,28 @@ class Solution0224 {
             }
         }
         return res
+    }
+}
+// endregion
+
+// region 堆
+// 502. IPO
+class Solution0502 {
+    fun findMaximizedCapital(k: Int, w: Int, profits: IntArray, capital: IntArray): Int {
+        val n = profits.size
+        val index = (0..<n).sortedWith { aIndex, bIndex -> capital[aIndex] - capital[bIndex] }
+        val queue = PriorityQueue<Int> { aProfit, bProfit -> bProfit - aProfit }
+        var i = 0
+        var curW = w
+        for (j in 0..<k) {
+            while (i < n && curW >= capital[index[i]]) {
+                queue.offer(profits[index[i]])
+                ++i
+            }
+            if (queue.isEmpty()) break
+            curW += queue.poll()
+        }
+        return curW
     }
 }
 // endregion
