@@ -1434,6 +1434,62 @@ class Solution0127 {
         return 0
     }
 }
+
+// 126. 单词接龙II
+class Solution0126 {
+    data class Node(val word: String, var prev: Node? = null)
+    fun findLadders(beginWord: String, endWord: String, wordList: List<String>): List<List<String>> {
+        val res = mutableListOf<List<String>>()
+        if (beginWord.length != endWord.length) return res
+        val wordSet = wordList.toSet()
+        if (endWord !in wordSet) return res
+        if (beginWord == endWord) {
+            res.add(listOf(beginWord))
+            return res
+        }
+        val queue = LinkedList<Node>()
+        queue.offer(Node(beginWord))
+        val visited = hashSetOf<String>()
+        visited.add(beginWord)
+        while(queue.isNotEmpty()) {
+            var n = queue.size
+            var found = false
+            while(n-- > 0) {
+                val node = queue.poll()
+                val curWord = node.word
+                for (i in curWord.indices) {
+                    for (c in 'a'..'z') {
+                        if (c != curWord[i]) {
+                            val nextWord = StringBuilder(curWord).apply { setCharAt(i, c) }.toString()
+                            if (nextWord in wordSet) {
+                                if (nextWord == endWord) {
+                                    found = true
+                                    res.add(getPath(Node(nextWord, node)))
+                                }
+                                if (nextWord !in visited) {
+                                    visited.add(nextWord)
+                                    queue.offer(Node(nextWord, node))
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (found) break
+        }
+        return res
+    }
+
+    private fun getPath(node: Node): List<String> {
+        val res = LinkedList<String>()
+        var cur: Node? = node
+        while(cur != null) {
+            res.addFirst(cur.word)
+            cur = cur.prev
+        }
+        return res
+    }
+}
 // endregion
 
 // region 二分查找
